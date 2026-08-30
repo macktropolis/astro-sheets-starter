@@ -1,0 +1,2 @@
+# Drop blog body images here.
+# <FloatImage src="photo.jpg"> and ![alt](photo.jpg) resolve bare filenames to /assets/blog/
