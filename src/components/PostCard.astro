@@ -1,0 +1,78 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'posts'>;
+  featured?: boolean;
+}
+
+const { entry, featured = false } = Astro.props;
+const { title, description, publishedAt, image, tags } = entry.data;
+const { Content } = await render(entry);
+
+const date = new Date(publishedAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article
+  class:list={[
+    'rounded-xl border bg-[var(--color-surface)] overflow-hidden transition-all duration-200',
+    featured
+      ? 'border-[var(--color-accent)]/40 shadow-lg'
+      : 'border-[var(--color-border)] hover:border-[var(--color-accent)]/30',
+  ]}
+>
+  {image && (
+    <div class:list={['overflow-hidden', featured ? 'aspect-[16/7]' : 'aspect-video']}>
+      <img src={image} alt="" class="w-full h-full object-cover" />
+    </div>
+  )}
+
+  <div class:list={['flex flex-col gap-3', featured ? 'p-8' : 'p-6']}>
+
+    {featured && (
+      <span class="text-xs font-medium text-[var(--color-accent)] uppercase tracking-widest">
+        Latest Post
+      </span>
+    )}
+
+    <h2 class:list={[
+      'font-bold text-[var(--color-text)] leading-snug',
+      featured ? 'text-3xl' : 'text-xl',
+    ]}>
+      <a href={`/posts/${entry.id}`} class="hover:text-[var(--color-accent)] transition-colors">
+        {title}
+      </a>
+    </h2>
+
+    <!-- Truncated body (2 lines) -->
+    <div class="text-[var(--color-muted)] text-sm leading-relaxed prose prose-sm max-w-none line-clamp-2">
+      <Content />
+    </div>
+
+    <div class="flex items-center justify-between pt-2 border-t border-[var(--color-border)] mt-auto">
+      <time class="text-xs text-[var(--color-muted)]">{date}</time>
+      <a
+        href={`/posts/${entry.id}`}
+        class="text-xs font-medium text-[var(--color-accent)] hover:underline"
+      >
+        Read more →
+      </a>
+    </div>
+
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 pt-1">
+        {tags.map((tag) => (
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+  </div>
+</article>

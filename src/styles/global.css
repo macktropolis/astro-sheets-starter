@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  :root {
+    /* ── Brand palette — swap these to match your project ─────────── */
+    --color-bg:       oklch(0.98 0.005 240);   /* near-white page background  */
+    --color-surface:  oklch(0.96 0.005 240);   /* card / panel background     */
+    --color-border:   oklch(0.88 0.01  240);   /* subtle borders               */
+    --color-text:     oklch(0.18 0.02  240);   /* primary text                 */
+    --color-muted:    oklch(0.45 0.03  240);   /* secondary / label text       */
+    --color-accent:   oklch(0.58 0.19   25);   /* coral-red — your brand color */
+    --color-accent-glow: oklch(0.58 0.19 25 / 0.3);
+
+    /* ── Typography ──────────────────────────────────────────────────── */
+    --font-display: 'Inter', system-ui, sans-serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+    --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  p a, li a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: oklch(from var(--color-accent) l c h / 0.4);
+    text-underline-offset: 3px;
+  }
+  p a:hover, li a:hover {
+    text-decoration-color: var(--color-accent);
+  }
+
+  img { max-width: 100%; }
+}
+
+/* ── Review / detail modals ───────────────────────────────────────── */
+@layer utilities {
+  dialog.detail-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    border: none;
+    padding: 0;
+    max-width: min(90vw, 44rem);
+    width: 100%;
+    max-height: 85dvh;
+    overflow: hidden;
+    background: var(--color-surface);
+    border-radius: 0.75rem;
+    border: 1px solid oklch(from var(--color-accent) l c h / 0.35);
+    box-shadow: 0 25px 60px -12px oklch(0 0 0 / 0.35);
+    color: var(--color-text);
+  }
+
+  dialog.detail-modal[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  dialog.detail-modal::backdrop {
+    background: oklch(0.1 0.01 240 / 0.8);
+    backdrop-filter: blur(6px);
+  }
+
+  body:has(dialog.detail-modal[open]) {
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) =>
+  import.meta.env.PROD ? !data.draft : true
+);
+const sorted = allPosts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+const featured = sorted[0];
+const rest = sorted.slice(1, 4);
+---
+
+<Layout title="My Site">
+
+  <!-- Hero -->
+  <section class="px-6 py-20 text-center max-w-3xl mx-auto">
+    <h1 class="text-5xl font-bold text-[var(--color-text)] leading-tight mb-4">
+      Welcome to My Site
+    </h1>
+    <p class="text-lg text-[var(--color-muted)] mb-8">
+      Powered by Astro and Google Sheets — update your content without touching code.
+    </p>
+    <a
+      href="/posts"
+      class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-accent)] text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
+    >
+      Browse all posts →
+    </a>
+  </section>
+
+  <!-- Latest post -->
+  {featured && (
+    <section class="px-6 pb-16 max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Latest Post</h2>
+      <PostCard entry={featured} featured={true} />
+    </section>
+  )}
+
+  <!-- Recent posts -->
+  {rest.length > 0 && (
+    <section class="px-6 pb-20 max-w-5xl mx-auto">
+      <div class="flex items-baseline justify-between mb-6">
+        <h2 class="text-2xl font-bold text-[var(--color-text)]">Recent Posts</h2>
+        <a href="/posts" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors">
+          All posts →
+        </a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {rest.map((entry) => <PostCard entry={entry} />)}
+      </div>
+    </section>
+  )}
+
+</Layout>

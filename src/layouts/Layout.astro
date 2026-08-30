@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'My Site', description = 'Built with Astro + Google Sheets' } = Astro.props;
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Swap this for your own font choices -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="border-b border-[var(--color-border)] px-6 py-4">
+    <nav class="max-w-5xl mx-auto flex items-center justify-between">
+      <a href="/" class="font-bold text-lg tracking-tight text-[var(--color-text)]">
+        My Site
+      </a>
+      <div class="flex gap-6 text-sm text-[var(--color-muted)]">
+        <a href="/" class="hover:text-[var(--color-accent)] transition-colors">Home</a>
+        <a href="/posts" class="hover:text-[var(--color-accent)] transition-colors">Posts</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="border-t border-[var(--color-border)] mt-24 px-6 py-8 text-center text-sm text-[var(--color-muted)]">
+    Built with <a href="https://astro.build" class="hover:text-[var(--color-accent)]">Astro</a> + Google Sheets
+  </footer>
+</body>
+</html>

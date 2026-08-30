@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) =>
+  import.meta.env.PROD ? !data.draft : true
+);
+const posts = allPosts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<Layout title="Posts — My Site">
+  <section class="px-6 py-16 max-w-5xl mx-auto">
+    <h1 class="text-4xl font-bold text-[var(--color-text)] mb-10">All Posts</h1>
+    {posts.length === 0 ? (
+      <p class="text-[var(--color-muted)]">No posts yet. Add some rows to your Google Sheet!</p>
+    ) : (
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((entry) => <PostCard entry={entry} />)}
+      </div>
+    )}
+  </section>
+</Layout>
