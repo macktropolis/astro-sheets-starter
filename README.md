@@ -25,7 +25,11 @@ npm run dev
 
 ## Connecting your Google Sheet
 
-1. Create a Google Sheet with these columns:
+### 1. Create the Sheet
+
+1. Go to [sheets.new](https://sheets.new) to create a blank Google Sheet.
+2. Rename the file (e.g. "My Site — Posts") and rename the tab at the bottom from `Sheet1` to something like `Posts`.
+3. In row 1, add these column headers exactly as written — they're case-sensitive:
 
    | Column | Required | Notes |
    |--------|----------|-------|
@@ -39,15 +43,33 @@ npm run dev
    | Featured | | `TRUE` or `YES` to feature on the home page |
    | Draft | | `TRUE` or `YES` to hide in production |
 
-2. Publish the sheet as CSV:
-   **File → Share → Publish to web → Comma-separated values (.csv) → Publish**
+4. Add one row under the headers to test with — a `Title` and a sentence of `Body` text is enough. Rows with no `Title` are skipped.
 
-3. Copy the URL and paste it into `src/content.config.ts`:
+### 2. Publish the sheet as CSV
+
+1. **File → Share → Publish to web.**
+2. In the first dropdown, select the specific tab you just set up (not "Entire document") — this matters once you add more tabs.
+3. In the second dropdown, choose **Comma-separated values (.csv)**.
+4. Click **Publish**, then confirm the dialog.
+5. Copy the generated URL. It looks like:
+   ```
+   https://docs.google.com/spreadsheets/d/e/2PACX-…/pub?output=csv
+   ```
+
+### 3. Connect it to the site
+
+1. Open `src/content.config.ts`.
+2. Paste the URL in:
    ```ts
    const POSTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/…/pub?output=csv';
    ```
+3. Run `npm run dev` and visit `/posts` — your test row should appear.
 
-4. Run `npm run dev` — your posts appear immediately.
+### 4. Publishing new content
+
+- Edit or add rows in the Sheet — the published CSV reflects changes within a minute or two, no re-publishing step needed.
+- `npm run dev` re-fetches the Sheet each time the dev server (re)starts.
+- A deployed static site won't notice a Sheet edit on its own — rebuild and redeploy to pick up new content, or wire up an auto-rebuild (see [Deploy](#deploy) below).
 
 ---
 
